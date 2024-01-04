@@ -1,9 +1,11 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useEffect } from "react"
 
 const DataContext = createContext();
 
 export const DataProvider = ({children}) => {
 const [quizs, setQuizs] = useState([]);
+const [question, setQuestion] = useState({});
+const [questionIndex, setQuestionIndex] = useState(0);
 const [showStart, setShowStart] = useState(true);
 const [showQuiz, setShowQuiz] = useState(false);
 
@@ -35,13 +37,19 @@ function createDataObj(data) {
     }
 }
 
+useEffect(() => {
+    if (quizs.length > questionIndex) {
+        setQuestion(quizs[questionIndex])
+    }
+}, [quizs, questionIndex])
+
 const startQuiz = () => {
     getQuiz();
     setShowStart(false);
     setShowQuiz(true);
 }
   return (
-    <DataContext.Provider value={{showStart, setShowStart, showQuiz, setShowQuiz, startQuiz}}>
+    <DataContext.Provider value={{showStart, setShowStart, showQuiz, setShowQuiz, startQuiz, quizs, questionIndex, question}}>
         {children}
     </DataContext.Provider>
   )

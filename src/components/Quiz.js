@@ -3,7 +3,7 @@ import DataContext from "../context/DataProvider"
 
 export const Quiz = () => {
     const answerBtnStyle = 'option w-100 text-start btn text-white py-2 px-3 mt-3 rounded btn-dark';
-    const { showQuiz, quizs, questionIndex, question } = useContext(DataContext);
+    const { showQuiz, quizs, questionIndex, question, checkAnswer, correctAnswer } = useContext(DataContext);
   return (
     <section className="text-white bg-dark" style={{display: showQuiz ? 'block' : 'none'}}>
         <div className="container">
@@ -19,7 +19,7 @@ export const Quiz = () => {
                         <div>
                             {
                                 question?.options?.map((option, index) => 
-                                    <button key={index} className={ answerBtnStyle }>{option}</button>
+                                    <button key={index} className={ `${answerBtnStyle} ${correctAnswer === option && 'bg-success'}` } onClick={(event) => checkAnswer(event, option)}>{option}</button>
                                 )
                             }
                             

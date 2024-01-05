@@ -6,6 +6,9 @@ export const DataProvider = ({children}) => {
 const [quizs, setQuizs] = useState([]);
 const [question, setQuestion] = useState({});
 const [questionIndex, setQuestionIndex] = useState(0);
+const [correctAnswer, setCorrectAnswer] = useState('');
+const [selectedAnswer, setSelectedAnswer] = useState('');
+const [mark, setMark] = useState(0);
 const [showStart, setShowStart] = useState(true);
 const [showQuiz, setShowQuiz] = useState(false);
 
@@ -41,7 +44,20 @@ useEffect(() => {
     if (quizs.length > questionIndex) {
         setQuestion(quizs[questionIndex])
     }
-}, [quizs, questionIndex])
+}, [quizs, questionIndex]);
+
+const checkAnswer  = (event, selected) => {
+    if (!selectedAnswer) {
+        setCorrectAnswer(question.answer);
+        setSelectedAnswer(selected);
+        if (selected === question.answer) {
+            event.target.classList.add('bg-success');
+            setMark(mark + 10);
+            return;
+        }
+        event.target.classList.add('bg-danger');
+    }
+}
 
 const startQuiz = () => {
     getQuiz();
@@ -49,7 +65,7 @@ const startQuiz = () => {
     setShowQuiz(true);
 }
   return (
-    <DataContext.Provider value={{showStart, setShowStart, showQuiz, setShowQuiz, startQuiz, quizs, questionIndex, question}}>
+    <DataContext.Provider value={{showStart, setShowStart, showQuiz, setShowQuiz, startQuiz, quizs, questionIndex, question, checkAnswer, correctAnswer}}>
         {children}
     </DataContext.Provider>
   )
